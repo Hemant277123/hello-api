@@ -14,7 +14,7 @@ public class HelloController {
     @GetMapping
     public Map<String, String> sayHello() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Hello FarAlpha Technologies");
+        response.put("message", "Hello ForAlpha Technologies");
         return response;
     }
 }
