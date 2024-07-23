@@ -3,39 +3,42 @@ name: Deploy to VM
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Java
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
 
-    - name: Build with Maven
-      run: mvn clean package
+      - name: Build with Maven
+        run: mvn clean package
 
-    - name: Copy files via SSH
-      uses: appleboy/scp-action@v0.1.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        source: "target/hello-backend-0.0.1-SNAPSHOT.jar"
-        target: "/home/azureuser/"
+      - name: List target directory
+        run: ls -la target/
 
-    - name: Execute SSH command
-      uses: appleboy/ssh-action@v0.1.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          sudo pkill -f 'java -jar'
-          sudo nohup java -jar /home/azureuser/hello-backend-0.0.1-SNAPSHOT.jar &
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v0.3.0  # Use the latest stable version
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "target/hello-api-0.0.1-SNAPSHOT.jar"
+          target: "/home/azureuser/"
+
+      - name: Execute SSH command
+        uses: appleboy/ssh-action@v0.3.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo pkill -f 'java -jar'
+            sudo nohup java -jar /home/azureuser/hello-api-0.0.1-SNAPSHOT.jar &
