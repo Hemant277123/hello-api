@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'  # Make sure to include the distribution
+        distribution: 'temurin'  # Use 'temurin' for the Java distribution
 
     - name: Build with Maven
       run: mvn clean package
@@ -26,12 +26,12 @@ jobs:
       run: ls -la target/
 
     - name: Copy files via SSH
-      uses: appleboy/scp-action@v0.2.1
+      uses: appleboy/scp-action@v0.1.2
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        source: "target/hello-backend-0.0.1-SNAPSHOT.jar"
+        source: "target/hello-api-0.0.1-SNAPSHOT.jar"
         target: "/home/azureuser/"
 
     - name: Execute SSH command
@@ -42,4 +42,4 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           sudo pkill -f 'java -jar'
-          sudo nohup java -jar /home/azureuser/hello-backend-0.0.1-SNAPSHOT.jar &
+          sudo nohup java -jar /home/azureuser/hello-api-0.0.1-SNAPSHOT.jar &
