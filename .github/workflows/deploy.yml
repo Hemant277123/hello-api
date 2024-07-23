@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-java@v3  # Updated to the latest version
       with:
         java-version: '17'
+        distribution: 'zulu'  # Specify the JDK distribution
 
     - name: Build with Maven
       run: mvn clean package
