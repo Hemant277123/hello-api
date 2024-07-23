@@ -3,7 +3,7 @@ name: Deploy to VM
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -11,19 +11,18 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # Updated to the latest version
+      uses: actions/checkout@v2
 
     - name: Set up Java
-      uses: actions/setup-java@v3  # Updated to the latest version
+      uses: actions/setup-java@v2
       with:
-        java-version: '17'
-        distribution: 'zulu'  # Specify the JDK distribution
+        java-version: '11'
 
     - name: Build with Maven
       run: mvn clean package
 
     - name: Copy files via SSH
-      uses: appleboy/scp-action@v0.1.2
+      uses: appleboy/scp-action@v0.1.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -32,7 +31,7 @@ jobs:
         target: "/home/azureuser/"
 
     - name: Execute SSH command
-      uses: appleboy/ssh-action@v0.1.2
+      uses: appleboy/ssh-action@v0.1.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
