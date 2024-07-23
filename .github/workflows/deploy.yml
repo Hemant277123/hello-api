@@ -23,7 +23,7 @@ jobs:
       run: mvn clean package
 
     - name: Copy files via SSH
-      uses: appleboy/scp-action@v0.1.0
+      uses: appleboy/scp-action@latest
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -32,7 +32,7 @@ jobs:
         target: "/home/azureuser/"
 
     - name: Execute SSH command
-      uses: appleboy/ssh-action@v0.1.0
+      uses: appleboy/ssh-action@latest
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
